@@ -1,18 +1,17 @@
 """
 Memory layer for Job Needle Finder.
 
-The memory layer turns human feedback into persistent state.
+Memory represents what the system knows.
+Storage represents where that knowledge persists.
 
-This is the difference between:
-
-    "I don't like this job."
-
-and:
-
-    "The system should know why this type of job is not a fit."
+Keeping those responsibilities separate lets us change
+the storage technology without changing the behavior of
+the memory layer.
 """
 
 from dataclasses import dataclass, field
+
+from storage import Storage
 
 
 @dataclass
@@ -24,19 +23,30 @@ class Decision:
 
 @dataclass
 class Memory:
-    """
-    Persistent knowledge accumulated through human feedback.
-    """
+    storage: Storage = field(default_factory=Storage)
 
     decisions: list[Decision] = field(default_factory=list)
     preferences: list[str] = field(default_factory=list)
     exclusions: list[str] = field(default_factory=list)
 
+    def __post_init__(self):
+        self._load()
+
+    def _load(self):
+        """Load persistent knowledge into working memory."""
+
+        self.decisions = [
+            Decision(
+                job_id=job_id,
+                decision=decision,
+                reason=reason,
+            )
+            for job_id, decision, reason
+            in self.storage.get_decisions()
+        ]
+
     def is_excluded(self, job: dict) -> bool:
-        """
-        Determine whether the opportunity should be skipped
-        based on previously established knowledge.
-        """
+        """Check whether a job has already been rejected."""
 
         job_id = job.get("id")
 
@@ -52,30 +62,34 @@ class Memory:
         decision: str,
         reason: str,
     ):
-        """
-        Store human feedback so future runs can use it.
-        """
+        """Record feedback in both memory and persistent storage."""
 
-        self.decisions.append(
-            Decision(
-                job_id=job["id"],
-                decision=decision,
-                reason=reason,
-            )
+        record = Decision(
+            job_id=job["id"],
+            decision=decision,
+            reason=reason,
+        )
+
+        self.decisions.append(record)
+
+        self.storage.save_decision(
+            job_id=job["id"],
+            decision=decision,
+            reason=reason,
         )
 
     def add_preference(self, preference: str):
-        """
-        Add a newly discovered preference.
-        """
+        """Add a preference to the system's knowledge."""
 
         if preference not in self.preferences:
             self.preferences.append(preference)
 
+            self.storage.save_preference(preference)
+
     def add_exclusion(self, exclusion: str):
-        """
-        Add a new hard exclusion.
-        """
+        """Add a hard exclusion to persistent memory."""
 
         if exclusion not in self.exclusions:
             self.exclusions.append(exclusion)
+
+            self.storage.save_exclusion(exclusion)
