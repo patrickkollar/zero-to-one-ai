@@ -1,1 +1,63 @@
+# Public reference implementation.
+# This model is intentionally generic and contains no personal information.
 
+name: opportunity_evaluation
+
+dimensions:
+
+  actual_work:
+    weight: 0.50
+    question: >
+      How closely does the actual work in this opportunity match
+      the candidate's strengths and desired work?
+
+  seniority_and_scope:
+    weight: 0.15
+    question: >
+      Is the level, ownership, complexity and organizational scope
+      appropriate for the candidate?
+
+  transferability:
+    weight: 0.15
+    question: >
+      Can the candidate's existing experience transfer effectively,
+      including situations where the industry or domain is unfamiliar?
+
+  compensation:
+    weight: 0.10
+    question: >
+      Is the compensation sufficiently attractive relative to the
+      candidate's target?
+
+  work_model:
+    weight: 0.10
+    question: >
+      Does the actual work model meet the candidate's requirements?
+
+thresholds:
+  exceptional: 90
+  pursue: 85
+  investigate: 78
+  watch: 70
+  reject: 0
+
+principles:
+
+  - >
+    Evaluate the work, not merely the job title.
+
+  - >
+    Do not automatically reject an opportunity because the candidate
+    lacks direct industry experience.
+
+  - >
+    Distinguish between a genuine requirement and a preferred qualification.
+
+  - >
+    Treat work-model claims as evidence to be verified, not assumptions.
+
+  - >
+    A high score does not override a hard exclusion.
+
+  - >
+    Human feedback can change the model over time.
