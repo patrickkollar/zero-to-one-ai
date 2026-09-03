@@ -1,1 +1,59 @@
+# Public example only.
+# Real personal information should never be committed to the repository.
 
+candidate:
+  target_level:
+    - Senior Manager
+    - Director
+
+  preferred_work_model:
+    - Remote
+
+  compensation:
+    target: 200000
+    currency: USD
+
+  functional_focus:
+    - Business Operations
+    - Customer Operations
+    - Customer Success Operations
+    - Revenue Operations
+    - Strategic Operations
+    - Business Transformation
+    - Operating Model Design
+
+  strengths:
+    - Cross-functional leadership
+    - Operational transformation
+    - Process design
+    - Executive operating cadence
+    - Strategic planning
+    - Data-informed decision making
+    - AI-enabled operations
+    - Organizational leadership
+
+  avoid:
+    - Software engineering
+    - Data science
+    - Reporting-only roles
+    - Analytics-only roles
+
+evaluation:
+  weights:
+    actual_work: 0.50
+    seniority_and_scope: 0.15
+    transferability: 0.15
+    compensation: 0.10
+    work_model: 0.10
+
+  thresholds:
+    exceptional: 90
+    apply: 85
+    investigate: 78
+    watch: 70
+
+decision_rules:
+  - "Do not recommend opportunities already rejected by the candidate."
+  - "Do not treat a job as remote unless the employer's current information supports that conclusion."
+  - "Do not penalize an opportunity solely because the industry is unfamiliar."
+  - "Evaluate the actual work rather than relying primarily on the job title."
