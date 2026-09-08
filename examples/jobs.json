@@ -1,0 +1,56 @@
+[
+  {
+    "id": "job-001",
+    "title": "Senior Manager, Business Operations",
+    "company": "Northstar Technologies",
+    "work_model": "Remote",
+    "salary_min": 165000,
+    "salary_max": 205000,
+    "description": "Lead strategic business operations across customer-facing teams. Own operating cadence, cross-functional planning, process transformation, executive reporting and operational performance."
+  },
+  {
+    "id": "job-002",
+    "title": "Director, Customer Operations",
+    "company": "Atlas Software",
+    "work_model": "Remote",
+    "salary_min": 180000,
+    "salary_max": 225000,
+    "description": "Lead customer operations strategy and execution across a global organization. Build operating models, improve customer processes, establish performance management and lead cross-functional transformation initiatives."
+  },
+  {
+    "id": "job-003",
+    "title": "Senior Manager, Reporting & Analytics",
+    "company": "DataWorks Inc.",
+    "work_model": "Remote",
+    "salary_min": 170000,
+    "salary_max": 200000,
+    "description": "Lead a team responsible for executive dashboards, recurring reporting, data visualization, KPI development and analytics requests. Partner with business stakeholders to deliver reporting insights."
+  },
+  {
+    "id": "job-004",
+    "title": "Manager, Operations",
+    "company": "Acme Systems",
+    "work_model": "Remote",
+    "salary_min": 125000,
+    "salary_max": 145000,
+    "description": "Manage daily operational activities for a small team. Monitor workflows, resolve escalations, maintain procedures and provide weekly performance reporting."
+  },
+  {
+    "id": "job-005",
+    "title": "Director, Commercial Operations",
+    "company": "Helix Bio",
+    "work_model": "Remote",
+    "salary_min": 175000,
+    "salary_max": 220000,
+    "description": "Lead commercial operations transformation for a rapidly growing biotechnology company. Own process design, operating model development, cross-functional execution and executive performance management. Experience in biotechnology preferred but not required."
+  },
+  {
+    "id": "job-006",
+    "title": "Senior Manager, Operations",
+    "company": "Westfield Industries",
+    "work_model": "On-site",
+    "salary_min": 175000,
+    "salary_max": 215000,
+    "description": "Lead enterprise operations, process improvement and cross-functional initiatives. Partner with executives to improve operational performance and establish management routines. This position requires five days per week in the office."
+  }
+]

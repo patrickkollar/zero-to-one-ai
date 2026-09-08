@@ -1,25 +1,26 @@
 """
 Job Needle Finder workflow.
 
-This module orchestrates the system:
+The workflow orchestrates the system:
 
-    Search
-       ↓
+    Load
+      ↓
+    Hard Filters
+      ↓
     Evaluate
-       ↓
-    Filter
-       ↓
+      ↓
     Rank
-       ↓
+      ↓
     Present
-       ↓
-    Learn
 
 The workflow owns execution.
 The LLM owns interpretation and reasoning.
+Memory owns what the system has learned.
+Hard filters enforce non-negotiable rules.
 """
 
 from src.evaluate import evaluate_job
+from src.filters import apply_hard_filters
 
 
 def run_job_search(
@@ -33,20 +34,24 @@ def run_job_search(
     Execute one complete job-search cycle.
     """
 
-    # 1. Search for current opportunities
+    # 1. Load current opportunities.
     jobs = search_client.search(
         candidate_profile=candidate_profile
     )
 
+    # 2. Apply deterministic rules before invoking
+    #    the reasoning layer.
+    eligible_jobs, filtered_jobs = apply_hard_filters(
+        jobs=jobs,
+        memory=memory,
+        candidate_profile=candidate_profile,
+    )
+
     evaluated = []
 
-    # 2. Evaluate each opportunity
-    for job in jobs:
-
-        # 3. Check existing memory before spending
-        #    reasoning effort on something already rejected.
-        if memory.is_excluded(job):
-            continue
+    # 3. Evaluate only opportunities that survived
+    #    the hard filters.
+    for job in eligible_jobs:
 
         evaluation = evaluate_job(
             job=job,
@@ -62,11 +67,11 @@ def run_job_search(
             }
         )
 
-    # 4. Rank the surviving opportunities
+    # 4. Rank the surviving opportunities.
     evaluated.sort(
         key=lambda item: item["evaluation"].score,
         reverse=True,
     )
 
-    # 5. Return the highest-value opportunities
-    return evaluated
+    # 5. Return both evaluated and filtered opportunities.
+    return evaluated, filtered_jobs

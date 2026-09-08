@@ -1,19 +1,18 @@
 """
 Job opportunity evaluator.
 
-This module demonstrates the reasoning layer of the system.
-The LLM receives:
-    1. The candidate profile
-    2. The evaluation model
-    3. A job opportunity
+The reasoning layer evaluates the opportunity across the dimensions
+defined by the scoring model.
 
-It returns a structured assessment.
-
-No personal candidate information belongs in this public example.
+The LLM provides judgments.
+The scoring engine applies the weights.
+The workflow orchestrates the process.
 """
 
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Any, Dict
+
+from src.scoring import calculate_score, get_recommendation
 
 
 @dataclass
@@ -23,6 +22,7 @@ class Evaluation:
     reasoning: str
     strengths: list[str]
     concerns: list[str]
+    dimension_scores: Dict[str, float]
 
 
 def build_evaluation_prompt(
@@ -31,11 +31,7 @@ def build_evaluation_prompt(
     scoring_model: Dict[str, Any],
 ) -> str:
     """
-    Build the context supplied to the reasoning model.
-
-    The important design principle:
-    the model does not receive an arbitrary question.
-    It receives a structured decision problem.
+    Build the structured decision problem supplied to the reasoning model.
     """
 
     return f"""
@@ -50,19 +46,22 @@ EVALUATION MODEL:
 JOB:
 {job}
 
-Return:
+Return structured results containing:
 
-1. Overall score from 0-100
-2. Recommendation:
-   - exceptional
-   - pursue
-   - investigate
-   - watch
-   - reject
-3. Why this opportunity fits
-4. Concerns or gaps
-5. The strongest reason this candidate should pursue it
-6. The strongest reason they should not
+1. Scores from 0-100 for each evaluation dimension:
+   - actual_work
+   - seniority_and_scope
+   - transferability
+   - compensation
+   - work_model
+
+2. Why the opportunity fits
+
+3. Concerns or gaps
+
+4. The strongest reason this candidate should pursue it
+
+5. The strongest reason they should not
 
 Evaluate the actual work described in the job,
 not simply the title.
@@ -74,6 +73,9 @@ Distinguish between:
 - genuine gaps
 
 Do not invent information that is not present in the job posting.
+
+Do not calculate a final weighted score.
+The scoring engine will do that separately.
 """
 
 
@@ -84,11 +86,7 @@ def evaluate_job(
     llm_client,
 ) -> Evaluation:
     """
-    Send the structured decision problem to an LLM.
-
-    The specific LLM provider is intentionally injected rather
-    than hard-coded. This keeps the reasoning layer separate
-    from the workflow.
+    Evaluate a job using the reasoning layer and deterministic scorer.
     """
 
     prompt = build_evaluation_prompt(
@@ -99,10 +97,23 @@ def evaluate_job(
 
     response = llm_client.generate(prompt)
 
+    dimension_scores = response["dimension_scores"]
+
+    score = calculate_score(
+        dimension_scores=dimension_scores,
+        scoring_model=scoring_model,
+    )
+
+    recommendation = get_recommendation(
+        score=score,
+        scoring_model=scoring_model,
+    )
+
     return Evaluation(
-        score=response["score"],
-        recommendation=response["recommendation"],
+        score=score,
+        recommendation=recommendation,
         reasoning=response["reasoning"],
         strengths=response["strengths"],
         concerns=response["concerns"],
+        dimension_scores=dimension_scores,
     )
