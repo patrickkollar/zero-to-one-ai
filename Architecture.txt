@@ -1,0 +1,15 @@
+                    User
+                      │
+                Choose model
+                      │
+        ┌─────────────┼─────────────┐
+        ↓             ↓             ↓
+     OpenAI       Anthropic      Ollama
+        │             │             │
+        └─────────────┼─────────────┘
+                      ↓
+                LLM interface
+                      ↓
+               Job evaluation
+                      ↓
+             Deterministic scoring
