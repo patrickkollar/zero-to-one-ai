@@ -1,0 +1,15 @@
+                    ┌── Candidate Profile
+                    │
+                    ├── Preferences
+                    │
+Job Sources ───────→│
+                    │
+                    ├── Memory
+                    │
+                    ├── Evaluation Model
+                    │
+                    └── Feedback
+                         ↓
+                  Job Intelligence
+                         ↓
+                  Recommendations
