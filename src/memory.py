@@ -11,7 +11,7 @@ the memory layer.
 
 from dataclasses import dataclass, field
 
-from storage import Storage
+from src.storage import Storage
 
 
 @dataclass
