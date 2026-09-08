@@ -45,25 +45,35 @@ if __name__ == "__main__":
         "company": "Example Corp",
     }
 
-    # The AI recommended the opportunity.
-    print("AI recommendation:")
-    print("Score: 87")
-    print("Recommendation: pursue")
-    print()
+    # Check persistent memory before doing any work.
+    if memory.is_excluded(job):
+        print("Found existing decision in memory.")
+        print()
+        print(f"Job: {job['title']}")
+        print(f"Company: {job['company']}")
+        print("Status: EXCLUDED")
+        print()
+        print("Skipping evaluation.")
+        print("The system remembers the previous decision.")
 
-    # The human provides feedback.
-    feedback = {
-        "decision": "reject",
-        "reason": "Role is primarily reporting and analytics.",
-    }
+    else:
+        # The AI recommends the opportunity.
+        print("AI recommendation:")
+        print("Score: 87")
+        print("Recommendation: pursue")
+        print()
 
-    process_feedback(
-        memory=memory,
-        job=job,
-        feedback=feedback,
-    )
+        # The human provides feedback.
+        feedback = {
+            "decision": "reject",
+            "reason": "Role is primarily reporting and analytics.",
+        }
 
-    # A future run can now use that decision.
-    print()
-    print("Future search:")
-    print(f"Excluded: {memory.is_excluded(job)}")
+        process_feedback(
+            memory=memory,
+            job=job,
+            feedback=feedback,
+        )
+
+        print()
+        print("Decision saved to persistent memory.")
