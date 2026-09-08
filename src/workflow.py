@@ -19,7 +19,7 @@ The workflow owns execution.
 The LLM owns interpretation and reasoning.
 """
 
-from evaluate import evaluate_job
+from src.evaluate import evaluate_job
 
 
 def run_job_search(
