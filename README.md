@@ -1,5 +1,5 @@
 # zero-to-one-ai
-Automated job search agent. From conversational AI experimentation to a working agentic system
+WIP Automated job search agent. From conversational AI experimentation to a working agentic system
 # Zero → 1 → N
 
 ## Building useful AI from a real problem
