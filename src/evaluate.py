@@ -97,7 +97,7 @@ def evaluate_job(
 
     response = llm_client.generate(prompt)
 
-    dimension_scores = response["dimension_scores"]
+    dimension_scores = response.dimension_scores.model_dump()
 
     score = calculate_score(
         dimension_scores=dimension_scores,
@@ -112,8 +112,8 @@ def evaluate_job(
     return Evaluation(
         score=score,
         recommendation=recommendation,
-        reasoning=response["reasoning"],
-        strengths=response["strengths"],
-        concerns=response["concerns"],
+        reasoning=response.reasoning,
+        strengths=response.strengths,
+        concerns=response.concerns,
         dimension_scores=dimension_scores,
     )
