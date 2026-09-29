@@ -218,8 +218,8 @@ def print_results(results: list[dict], filtered_jobs: list[dict]):
         print()
 
 
-def main(use_real_llm: bool = False):
-    """Run one complete Job Needle Finder cycle."""
+def run_finder(use_real_llm: bool = False):
+    """Run one complete Job Needle Finder cycle and return the results."""
 
     candidate_profile = load_yaml(
         "config/candidate_profile.example.yaml"
@@ -246,6 +246,16 @@ def main(use_real_llm: bool = False):
         candidate_profile=candidate_profile,
         scoring_model=scoring_model,
         memory=memory,
+    )
+
+    return results, filtered_jobs
+
+
+def main(use_real_llm: bool = False):
+    """Run the Job Needle Finder and display results in the terminal."""
+
+    results, filtered_jobs = run_finder(
+        use_real_llm=use_real_llm
     )
 
     print_results(
