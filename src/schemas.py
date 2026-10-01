@@ -28,3 +28,14 @@ class LLMEvaluation(BaseModel):
     reasoning: str
     strengths: list[str]
     concerns: list[str]
+
+
+class DeepDiveAnalysis(BaseModel):
+    """
+    Detailed analysis generated on demand for a selected job.
+    """
+
+    why_it_fits: list[str]
+    where_it_doesnt_fit: list[str]
+    investigate: list[str]
+    bottom_line: str

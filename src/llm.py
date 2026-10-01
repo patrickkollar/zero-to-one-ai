@@ -10,7 +10,8 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from src.schemas import LLMEvaluation
+from src.schemas import DeepDiveAnalysis, LLMEvaluation
+
 
 load_dotenv()
 
@@ -23,6 +24,15 @@ class LLMClient:
     def generate(self, prompt: str) -> dict:
         """
         Generate a structured response from a prompt.
+
+        Concrete LLM implementations override this method.
+        """
+
+        raise NotImplementedError
+
+    def generate_deep_dive(self, prompt: str) -> DeepDiveAnalysis:
+        """
+        Generate a detailed analysis for a selected job.
 
         Concrete LLM implementations override this method.
         """
@@ -47,7 +57,6 @@ class OpenAIClient(LLMClient):
 
         self.client = OpenAI(api_key=api_key)
 
-
     def generate(self, prompt: str) -> LLMEvaluation:
         """
         Send a prompt to OpenAI and return a validated evaluation.
@@ -60,4 +69,17 @@ class OpenAIClient(LLMClient):
         )
 
         return response.output_parsed
-        
+
+    def generate_deep_dive(self, prompt: str) -> DeepDiveAnalysis:
+        """
+        Send a detailed analysis prompt to OpenAI and return
+        a validated deep-dive analysis.
+        """
+
+        response = self.client.responses.parse(
+            model=self.model,
+            input=prompt,
+            text_format=DeepDiveAnalysis,
+        )
+
+        return response.output_parsed
